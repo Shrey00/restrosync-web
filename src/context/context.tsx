@@ -20,7 +20,7 @@ const ContextWrapper = ({
       const token = localStorage.getItem("token");
       if (token) {
         try{
-          const response = await fetch("http://localhost:4000/user", {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,

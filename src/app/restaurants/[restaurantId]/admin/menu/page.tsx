@@ -25,7 +25,7 @@ export default function MenuItemsTable() {
     (async () => {
       setLoading(true);
       console.log(user)
-      const response = await fetch("http://localhost:4000/menu/items", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/items`, {
         method: "POST",
         credentials: "include",
         headers: {

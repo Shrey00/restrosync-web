@@ -40,7 +40,7 @@ const page = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:4000/restaurants/list/241b8620-6804-4f38-92dd-8914f7853682",
+          `${process.env.NEXT_PUBLIC_API_URL}/restaurants/list/241b8620-6804-4f38-92dd-8914f7853682`,
           {
             method: "GET",
             credentials: "include",

@@ -199,7 +199,7 @@ function MenuItemForm({
       }
 
       const variantResponse = await fetch(
-        "http://localhost:4000/menu/item/add-variants",
+        `${process.env.NEXT_PUBLIC_API_URL}/menu/item/add-variants`,
         {
           credentials: "include",
           method: "POST",
@@ -243,7 +243,7 @@ function MenuItemForm({
       }
 
       const variantResponse = await fetch(
-        "http://localhost:4000/menu/item/add-addons", //todo - make server side too
+        `${process.env.NEXT_PUBLIC_API_URL}/menu/item/add-addons`, //todo - make server side too
         {
           credentials: "include",
           method: "POST",
@@ -270,7 +270,7 @@ function MenuItemForm({
       formData.append("restaurantId", params.restaurantId as string);
       // formData.append("variant", watchVariants);
 
-      const response = await fetch("http://localhost:4000/menu/add-item", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/add-item`, {
         credentials: "include",
         method: "POST",
         headers: {
@@ -345,7 +345,7 @@ function MenuItemForm({
     });
   }
   async function handleFetchAddonsList() {
-    const response = await fetch("http://localhost:4000/menu/get-addons", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/get-addons`, {
       credentials: "include",
       headers: {
         Authorization: `Bearer ${user?.token}`,

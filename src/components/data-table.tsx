@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
       const rowData: MenuItem = table.getRowModel().rowsById[key]
         .original as MenuItem;
       setSubRowDataLoading({ ...subRowDataLoading, [key]: true });
-      const response = await fetch("http://localhost:4000/menu/item/variants", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/item/variants`, {
         credentials: "include",
         method: "POST",
         headers: {

@@ -9,7 +9,7 @@ const OrderItems = ({ orderId }: { orderId: string }) => {
   useEffect(() => {
     (async () => {
       const response = await fetch(
-        `http://localhost:4000/orders/order-items?orderId=${orderId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/orders/order-items?orderId=${orderId}`,
         {
           method: "GET",
           credentials: "include",

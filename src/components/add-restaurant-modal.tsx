@@ -55,8 +55,6 @@ import { MenuItem, MenuItemFormData } from "@/types";
 import SearchSelect from "./menu-type-search-select";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { features } from "process";
-import { COOKIE_NAME_PRERENDER_BYPASS } from "next/dist/server/api-utils";
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_IMAGES = 4;
@@ -133,7 +131,7 @@ function RestaurantForm({
   useEffect(() => {
     (async () => {
       const fetchTypesAndCategories = await fetch(
-        "http://localhost:4000/menu/get-menu-categories",
+        `${process.env.NEXT_PUBLIC_API_URL}/menu/get-menu-categories`,
         {
           method: "GET",
         }
@@ -173,7 +171,7 @@ function RestaurantForm({
         formData.append("images", image);
       });
       formData.append("restaurantId", params.restaurantId as string);
-      const response = await fetch("http://localhost:4000/menu/add-item", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/add-item`, {
         credentials: "include",
         method: "POST",
         headers: {
