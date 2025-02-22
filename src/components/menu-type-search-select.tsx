@@ -1,9 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useContext } from "react";
-import { UserContext } from "@/context/context";
-import { Check, ChevronsUpDown, PlusIcon } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -22,13 +20,11 @@ import {
 } from "@/components/ui/popover";
 
 export default function SearchSelect({
-  selectedType,
   options,
   FormControl,
   field,
   menuItemForm,
 }: {
-  selectedType: number;
   options: {
     id: string;
     type: string;
@@ -39,7 +35,6 @@ export default function SearchSelect({
   menuItemForm: any;
 }) {
   const [open, setOpen] = React.useState(false);
-  const { user } = useContext(UserContext);
   // async function handleAddNewCategory() {
   //   try {
   //     const response = await fetch("http://localhost:4000/menu/add-category", {
@@ -92,7 +87,7 @@ export default function SearchSelect({
                     className="data-[disabled]:pointer-events-auto"
                     key={index}
                     value={option.name}
-                    onSelect={(currentValue) => {
+                    onSelect={() => {
                       // setValue(currentValue === value ? "" : currentValue);
                       menuItemForm.setValue("category", option.id);
                       setOpen(false);

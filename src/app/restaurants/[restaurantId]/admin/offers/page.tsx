@@ -8,14 +8,12 @@ import { Button } from "@/components/ui/button";
 import CreateOfferModal from "@/components/create-offer-modal";
 import {
   Dialog,
-  DialogContent,
   DialogTrigger,
-  DialogHeader,
 } from "@/components/ui/dialog";
-const offers = () => {
+const Page = () => {
   const params = useParams();
   const [offersData, setOffersData] = useState([]);
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     (async () => {
@@ -54,4 +52,4 @@ const offers = () => {
   );
 };
 
-export default offers;
+export default Page;

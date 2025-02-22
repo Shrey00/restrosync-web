@@ -15,16 +15,13 @@ export default function MenuItemsTable() {
   const params = useParams();
   const { user } = useContext(UserContext);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const handleUpdate = (id: string, updates: Partial<MenuItem>): void => {
-    setMenuItems(
-      menuItems.map((item) => (item.id === id ? { ...item, ...updates } : item))
-    );
-  };
+  // const handleUpdate = (id: string, updates: Partial<MenuItem>): void => {
+  //   setMenuItems(
+  //     menuItems.map((item) => (item.id === id ? { ...item, ...updates } : item))
+  //   );
+  // };
   useEffect(() => {
     (async () => {
-      setLoading(true);
-      console.log(user)
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/items`, {
         method: "POST",
         credentials: "include",
@@ -36,7 +33,6 @@ export default function MenuItemsTable() {
       });
       const parsedResponse = await response.json();
       setMenuItems(parsedResponse.data);
-      setLoading(false);
     })();
   }, []);
 

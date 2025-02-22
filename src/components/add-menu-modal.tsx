@@ -1,17 +1,14 @@
 "use client";
 import {
-  ChangeEvent,
   useState,
   useCallback,
   useEffect,
   useContext,
-  MouseEventHandler,
 } from "react";
-``;
 import { useDropzone } from "react-dropzone";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { ChevronsLeftRightEllipsis, Coins, PlusIcon, X } from "lucide-react";
+import { PlusIcon, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Accordion,
@@ -33,7 +30,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import {
   DialogContent,
   DialogDescription,
@@ -51,34 +47,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/hooks/use-toast";
-import { MenuItem, MenuItemFormData } from "@/types";
+import { MenuItem } from "@/types";
 import SearchSelect from "./menu-type-search-select";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { features } from "process";
-import { COOKIE_NAME_PRERENDER_BYPASS } from "next/dist/server/api-utils";
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_IMAGES = 4;
 
 function MenuItemForm({
-  formData,
-  editing,
   menuItems,
   setMenuItems,
 }: {
-  formData: Partial<MenuItemFormData>;
-  editing?: boolean;
   menuItems?: MenuItem[];
   setMenuItems: any;
 }) {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
-  const [editItems, setEditItems] = useState<any | null>({ ...formData });
   const { user } = useContext(UserContext);
   const params = useParams();
   const [variantFormState, setVariantFormState] = useState<any>({});
-  const [addonsFormState, setAddonsFormState] = useState<any>({});
-  const [existingAddons, setExistingAddons] = useState<any>([]);
   const menuItemFormSchema = z.object({
     name: z.string(),
     category: z.coerce.number(),
@@ -127,16 +114,12 @@ function MenuItemForm({
   const watchTypeSelection = menuItemForm.watch("type");
   const watchShowHealthInfo = menuItemForm.watch("showHealthInfo");
   const watchVariants = menuItemForm.watch("variant");
-  const watchAddons = menuItemForm.watch("addons");
   const watchMarkedPrice = menuItemForm.watch("markedPrice");
-  const watchSellingPrice = menuItemForm.watch("sellingPrice");
   const watchDiscount = menuItemForm.watch("discount");
   const watchAutoCalculateSellingPrice = menuItemForm.watch(
     "autoCalculateSellingPrice"
   );
   const watchImages = menuItemForm.watch("images");
-  const [menuItemTypeOptions, setMenuItemTypeOptions] = useState([]);
-  const [variantIndex, setVariantIndex] = useState(0);
   const [categoriesUnderSelectedType, setCategoriesUnderSelectedType] =
     useState([]);
   useEffect(() => {
@@ -151,7 +134,6 @@ function MenuItemForm({
       const selectedCategories = menuItemsTypeData.data?.filter(
         (
           item: { id: any; type: string; categories: string[] },
-          index: number
         ) => item.id == menuItemForm.getValues("type")
       );
       setCategoriesUnderSelectedType(selectedCategories);
@@ -169,7 +151,6 @@ function MenuItemForm({
     }
   }, [watchDiscount, watchMarkedPrice]);
 
-
   async function handleVariantsFormSubmission(
     formData: any,
     responseMenuData: any
@@ -177,10 +158,9 @@ function MenuItemForm({
     if (watchVariants === "parent") {
       const variantFormData: any = [];
       for (const variantKey in variantFormState) {
-        let createVariantFormData: any = {};
+        const createVariantFormData: any = {};
         formData.forEach((value: any, variantFormDataKey: any) => {
           if (variantFormDataKey === "name") {
-            alert(variantFormState[variantKey].variantName);
             createVariantFormData["name"] =
               variantFormState[variantKey].variantName;
           } else if (variantFormDataKey === "variant")
@@ -198,7 +178,7 @@ function MenuItemForm({
         variantFormData.push(createVariantFormData);
       }
 
-      const variantResponse = await fetch(
+      await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/menu/item/add-variants`,
         {
           credentials: "include",
@@ -212,50 +192,49 @@ function MenuItemForm({
       );
     }
   }
-  async function handleAddonsFormSubmission(
-    formData: any,
-    responseMenuData: any
-  ) {
-    if (watchAddons === "addons") {
-      const addonsFormData: any = [];
-      for (const addonKey in addonsFormState) {
-        let createAddonsFormData: any = {};
-        formData.forEach((value: any, variantFormDataKey: any) => {
-          if (variantFormDataKey === "name") {
-            createAddonsFormData["name"] =
-              addonsFormState[addonKey].addonName;
-          } else if (variantFormDataKey === "variant")
-            createAddonsFormData["variant"] = "child";
-          else if (variantFormDataKey === "markedPrice")
-            createAddonsFormData["markedPrice"] =
-              variantFormState[addonKey].addonPrice;
-          else if (variantFormDataKey === "sellingPrice") {
-            createAddonsFormData["sellingPrice"] =
-              variantFormState[addonKey].addonPrice;
-          }else if (variantFormDataKey === "sellingPrice") {
-            createAddonsFormData["description"] =
-              variantFormState[addonKey].addonDescription;
-          } else createAddonsFormData[variantFormDataKey] = value;
+  // async function handleAddonsFormSubmission(
+  //   formData: any,
+  //   responseMenuData: any
+  // ) {
+  //   if (watchAddons === "addons") {
+  //     const addonsFormData: any = [];
+  //     for (const addonKey in addonsFormState) {
+  //       let createAddonsFormData: any = {};
+  //       formData.forEach((value: any, variantFormDataKey: any) => {
+  //         if (variantFormDataKey === "name") {
+  //           createAddonsFormData["name"] = addonsFormState[addonKey].addonName;
+  //         } else if (variantFormDataKey === "variant")
+  //           createAddonsFormData["variant"] = "child";
+  //         else if (variantFormDataKey === "markedPrice")
+  //           createAddonsFormData["markedPrice"] =
+  //             variantFormState[addonKey].addonPrice;
+  //         else if (variantFormDataKey === "sellingPrice") {
+  //           createAddonsFormData["sellingPrice"] =
+  //             variantFormState[addonKey].addonPrice;
+  //         } else if (variantFormDataKey === "sellingPrice") {
+  //           createAddonsFormData["description"] =
+  //             variantFormState[addonKey].addonDescription;
+  //         } else createAddonsFormData[variantFormDataKey] = value;
 
-          createAddonsFormData["mainItemId"] = responseMenuData.data[0].id;
-        });
-        addonsFormData.push(createAddonsFormData);
-      }
+  //         createAddonsFormData["mainItemId"] = responseMenuData.data[0].id;
+  //       });
+  //       addonsFormData.push(createAddonsFormData);
+  //     }
 
-      const variantResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/menu/item/add-addons`, //todo - make server side too
-        {
-          credentials: "include",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.token}`,
-          },
-          body: JSON.stringify(addonsFormData),
-        }
-      );
-    }
-  }
+  //     const variantResponse = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_URL}/menu/item/add-addons`, //todo - make server side too
+  //       {
+  //         credentials: "include",
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${user?.token}`,
+  //         },
+  //         body: JSON.stringify(addonsFormData),
+  //       }
+  //     );
+  //   }
+  // }
   async function onSubmit(values: { [key: string]: any }) {
     try {
       const formData = new FormData();
@@ -264,20 +243,23 @@ function MenuItemForm({
           formData.append(key, values[key]);
         }
       });
-      values.images.forEach((image: File, index: number) => {
+      values.images.forEach((image: File) => {
         formData.append("images", image);
       });
       formData.append("restaurantId", params.restaurantId as string);
       // formData.append("variant", watchVariants);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/add-item`, {
-        credentials: "include",
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/menu/add-item`,
+        {
+          credentials: "include",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: formData,
+        }
+      );
       const responseMenuData = await response.json();
       handleVariantsFormSubmission(formData, responseMenuData);
       // handleAddonsFormSubmission(formData, responseMenuData);
@@ -335,24 +317,27 @@ function MenuItemForm({
       },
     });
   }
-  function handleAddonsForm(e: any, key: string) {
-    setAddonsFormState({
-      ...addonsFormState,
-      [key]: {
-        ...addonsFormState[key],
-        [e.target.name]: e.target.value,
-      },
-    });
-  }
-  async function handleFetchAddonsList() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/get-addons`, {
-      credentials: "include",
-      headers: {
-        Authorization: `Bearer ${user?.token}`,
-      }
-    });
-    setExistingAddons([]);
-  }
+  // function handleAddonsForm(e: any, key: string) {
+  //   setAddonsFormState({
+  //     ...addonsFormState,
+  //     [key]: {
+  //       ...addonsFormState[key],
+  //       [e.target.name]: e.target.value,
+  //     },
+  //   });
+  // }
+  // async function handleFetchAddonsList() {
+  //   const response = await fetch(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/menu/get-addons`,
+  //     {
+  //       credentials: "include",
+  //       headers: {
+  //         Authorization: `Bearer ${user?.token}`,
+  //       },
+  //     }
+  //   );
+  //   setExistingAddons([]);
+  // }
   return (
     <Form {...menuItemForm}>
       <form
@@ -380,7 +365,7 @@ function MenuItemForm({
                         <p>Drop the files here ...</p>
                       ) : (
                         <p>
-                          Drag 'n' drop some files here, or click to select
+                          Drag &apos;n&apos; drop some files here, or click to select
                           files
                         </p>
                       )}
@@ -506,7 +491,6 @@ function MenuItemForm({
                 <FormLabel>Category</FormLabel>
                 <FormControl>
                   <SearchSelect
-                    selectedType={parseInt(menuItemForm.getValues("type"))}
                     options={categoriesUnderSelectedType}
                     FormControl={FormControl}
                     field={field}
@@ -671,7 +655,7 @@ function MenuItemForm({
             {watchVariants === "parent" &&
               Object.keys(variantFormState).map((item, index) => {
                 return (
-                  <div className="flex gap-4 items-start">
+                  <div key={index} className="flex gap-4 items-start">
                     <Accordion
                       key={index}
                       type="single"
@@ -1004,31 +988,33 @@ const AddMenuItemModal = ({
   menuItems?: MenuItem[];
   setMenuItems?: any;
 }) => {
-  const [formData, setFormData] = useState<Partial<MenuItemFormData>>({
-    id: "",
-    images: [],
-    name: "",
-    category: "",
-    type: "",
-    cuisineType: "",
-    orders: 0,
-    available: false,
-    description: "",
-    markedPrice: 0,
-    sellingPrice: 0,
-    discount: 0,
-    calories: 0,
-    healthScore: 0,
-    showHealthScore: false,
-    variant: "none",
-  });
-  useEffect(() => {
-    if (selectedElt) {
-      setFormData(selectedElt);
-    }
-  }, [selectedElt]);
+  // const [formData, setFormData] = useState<Partial<MenuItemFormData>>({
+  //   id: "",
+  //   images: [],
+  //   name: "",
+  //   category: "",
+  //   type: "",
+  //   cuisineType: "",
+  //   orders: 0,
+  //   available: false,
+  //   description: "",
+  //   markedPrice: 0,
+  //   sellingPrice: 0,
+  //   discount: 0,
+  //   calories: 0,
+  //   healthScore: 0,
+  //   showHealthScore: false,
+  //   variant: "none",
+  // });
+  // useEffect(() => {
+  //   if (selectedElt) {
+  //     setFormData(selectedElt);
+  //   }
+  // }, [selectedElt]);
+  if(selectedElt) {
+    console.log('selected')
+  }
 
-  const handleChange = (e: ChangeEvent) => {};
   return (
     <DialogContent className="h-[80vh] max-w-3xl overflow-auto">
       <DialogHeader>
@@ -1040,8 +1026,6 @@ const AddMenuItemModal = ({
         </DialogDescription>
       </DialogHeader>
       <MenuItemForm
-        formData={formData}
-        editing={selectedElt ? true : false}
         menuItems={menuItems}
         setMenuItems={setMenuItems ? setMenuItems : null}
       />

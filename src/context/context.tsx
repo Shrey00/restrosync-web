@@ -1,22 +1,20 @@
 "use client";
 import React, { useState, createContext, useEffect } from "react";
 import { User } from "@/types";
-import { useRouter } from "next/navigation";
 export const UserContext = createContext<{
   user: User | null;
-  setUser: Function | null;
-}>({ user: null, setUser: null });
+  setUser: (user: User)=>void; 
+}>({ user: null, setUser: ()=>null });
 const ContextWrapper = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
   const [userState, setUserState] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
+  // const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     (async () => {
-      setLoading(true);
+      // setLoading(true);
       const token = localStorage.getItem("token");
       if (token) {
         try{
@@ -27,7 +25,6 @@ const ContextWrapper = ({
             },
           });
           const parsedResponse = await response.json();
-          console.log(parsedResponse)
           setUserState({
             firstName: parsedResponse.data[0].firstName,
             lastName: parsedResponse.data[0].lastName,
@@ -36,7 +33,7 @@ const ContextWrapper = ({
             contact: parsedResponse.data[0].contact,
             token: token,
           });
-          setLoading(false);
+          // setLoading(false);
         }
         catch(e) {
           console.log(e)

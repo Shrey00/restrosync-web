@@ -1,24 +1,9 @@
 "use client";
-import type { Metadata } from "next";
-import localFont from "next/font/local";
 import ContextWrapper from "@/context/context";
 import Header from '@/components/header';
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
-const plusJakartaSans = localFont({
-  src: "./fonts/PlusJakartaSans-Regular.ttf",
-  variable: "--font-jakarta",
-});
+
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -32,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${plusJakartaSans.variable} dark antialiased `}>
+      <body className={`dark antialiased`}>
         <ContextWrapper>
           <Header/>
           {children}

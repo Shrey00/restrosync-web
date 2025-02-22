@@ -1,7 +1,6 @@
 import {
   DialogContent,
   DialogHeader,
-  DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "./ui/input";
@@ -9,7 +8,7 @@ import { Label } from "./ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form, FormField, FormItem, FormControl, FormLabel } from "./ui/form";
+import { Form, FormField, FormItem, FormLabel } from "./ui/form";
 import { Calendar } from "./ui/calendar";
 import { Button } from "./ui/button";
 import { Combobox } from "./ui/combo-box";
@@ -73,7 +72,7 @@ const CreateOfferModal = () => {
       formData.append(key, values[key]);
     });
     formData.append("image",  image);
-    const response = await fetch(
+    await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/restaurants/offers/create`,
       {
         method: "POST",
@@ -83,7 +82,6 @@ const CreateOfferModal = () => {
         body: formData,
       }
     );
-    const data = await response.json();
   }
   const watchCouponCode = offerForm.watch("couponCode");
   const watchStartTime = offerForm.watch("startTime");
@@ -291,7 +289,7 @@ const CreateOfferModal = () => {
                           type="radio"
                           value={offerOn}
                           checked={offerOn === 0}
-                          onChange={(e) => setOfferOn(0)}
+                          onChange={() => setOfferOn(0)}
                         />
                       </div>
                       <div className="flex justify-between">
@@ -302,7 +300,7 @@ const CreateOfferModal = () => {
                           type="radio"
                           value={offerOn}
                           checked={offerOn === 1}
-                          onChange={(e) => setOfferOn(1)}
+                          onChange={() => setOfferOn(1)}
                         />
                       </div>
                     </div>
@@ -337,7 +335,7 @@ const CreateOfferModal = () => {
                           type="radio"
                           value={freeItem}
                           checked={freeItem === 0}
-                          onChange={(e) => setFreeItem(0)}
+                          onChange={() => setFreeItem(0)}
                         />
                       </div>
                       <div className="flex justify-between">
@@ -348,7 +346,7 @@ const CreateOfferModal = () => {
                           type="radio"
                           value={freeItem}
                           checked={freeItem === 1}
-                          onChange={(e) => setFreeItem(1)}
+                          onChange={() => setFreeItem(1)}
                         />
                       </div>
                     </div>

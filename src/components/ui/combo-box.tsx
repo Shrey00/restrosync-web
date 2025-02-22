@@ -25,7 +25,7 @@ export function Combobox({
   value,
 }: {
   data: any;
-  setValue: any;
+  setValue: (item: any)=>void;
   value: any;
 }) {
   const [open, setOpen] = React.useState(false);
@@ -54,7 +54,7 @@ export function Combobox({
                 <CommandItem
                   key={index}
                   value={item.name}
-                  onSelect={(currentValue) => {
+                  onSelect={() => {
                     setValue(item);
                     setOpen(false);
                   }}

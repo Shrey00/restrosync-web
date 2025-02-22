@@ -13,25 +13,25 @@ import {
 import { EyeOpenIcon, EyeClosedIcon } from "@radix-ui/react-icons";
 import { UserContext } from "@/context/context";
 export default function SignIpForm() {
-  const [step, setStep] = useState(1);
+  const [step] = useState(1);
   const [passwordShow, setPasswordShow] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const countryCode = {
-    name: "India",
-    phone: "+91",
-    emoji: "\ud83c\uddee\ud83c\uddf3",
-    image:
-      "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IN.svg",
-  };
+  // const countryCode = {
+  //   name: "India",
+  //   phone: "+91",
+  //   emoji: "\ud83c\uddee\ud83c\uddf3",
+  //   image:
+  //     "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/IN.svg",
+  // };
   const [formWarning, setFormWarning] = useState("");
   const emailRef = useRef<HTMLInputElement>(null);
   const { setUser } = useContext(UserContext);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = e.target.value;
+    const inputValue = e.target.value;
     setFormData({ ...formData, [e.target.name]: inputValue });
   };
 
@@ -67,7 +67,7 @@ export default function SignIpForm() {
       const parsedResponse = await response.json();
       const token = parsedResponse.data[0].token;
       localStorage.setItem('token', token);
-      setUser && setUser({
+      setUser({
         firstName: parsedResponse.data[0].firstName,
         lastName: parsedResponse.data[0].lastName,
         email: parsedResponse.data[0].email,

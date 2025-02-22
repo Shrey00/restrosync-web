@@ -29,8 +29,8 @@ const OrderItems = ({ orderId }: { orderId: string }) => {
         <Skeleton className="h-[65px] w-[785px] mt-4" />
       ) : (
         <div>
-          {orderItems?.map((item) => (
-            <OrderItemCard orderItem={item} />
+          {orderItems?.map((item, index : number) => (
+            <OrderItemCard key={index} orderItem={item} />
           ))}
         </div>
       )}

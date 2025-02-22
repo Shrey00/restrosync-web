@@ -6,10 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { UserContext } from "@/context/context";
 import {
-  MapPin,
   Clock,
-  Cloud,
-  UtensilsCrossed,
   Star,
   MoreVerticalIcon,
 } from "lucide-react";
@@ -20,7 +17,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-const page = () => {
+const Page = () => {
   type RestaurantListItem = {
     id: string;
     name: string;
@@ -33,11 +30,10 @@ const page = () => {
   };
   type Restaurantlist = RestaurantListItem[];
   const [restaurants, setRestaurants] = useState<Restaurantlist>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   useEffect(() => {
     (async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/restaurants/list/241b8620-6804-4f38-92dd-8914f7853682`,
@@ -51,7 +47,7 @@ const page = () => {
         );
         const parsedResponse = await response.json();
         setRestaurants(parsedResponse);
-        setLoading(false);
+        // setLoading(false);
       } catch (e) {
         console.log(e);
       }
@@ -130,4 +126,4 @@ const page = () => {
     </div>
   );
 };
-export default page;
+export default Page;

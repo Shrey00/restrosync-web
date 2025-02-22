@@ -17,7 +17,6 @@ import {
   BarChart2,
   Smartphone,
   CheckCircle,
-  Menu,
 } from "lucide-react"
 
 export default function HomePage() {
@@ -145,8 +144,8 @@ export default function HomePage() {
                   <Badge>Owner, Pizza Palace</Badge>
                 </CardHeader>
                 <CardContent>
-                  "RestroSync has transformed our operations. The white-labeled app has been a game-changer for our
-                  customer engagement."
+                &quot;RestroSync has transformed our operations. The white-labeled app has been a game-changer for our
+                  customer engagement.&quot;
                 </CardContent>
               </Card>
               <Card>
@@ -164,7 +163,7 @@ export default function HomePage() {
                   <Badge>Manager, Cafe Delight</Badge>
                 </CardHeader>
                 <CardContent>
-                  "The inventory management feature alone has saved us countless hours and reduced waste significantly."
+                   &quot;The inventory management feature alone has saved us countless hours and reduced waste significantly.&quot;
                 </CardContent>
               </Card>
               <Card>
@@ -182,7 +181,7 @@ export default function HomePage() {
                   <Badge>CEO, Burger Bonanza</Badge>
                 </CardHeader>
                 <CardContent>
-                  "With RestroSync, we've seen a 30% increase in online orders and improved customer satisfaction."
+                  &quot;With RestroSync, we&apos;ve seen a 30% increase in online orders and improved customer satisfaction.&quot;
                 </CardContent>
               </Card>
             </div>
@@ -392,7 +391,7 @@ export default function HomePage() {
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-4">
-                <AccordionTrigger>How secure is my restaurant's data?</AccordionTrigger>
+                <AccordionTrigger>How secure is my restaurant&apos;s data?</AccordionTrigger>
                 <AccordionContent>
                   We take data security very seriously. RestroSync uses industry-standard encryption and security
                   protocols to ensure your data is always protected. We are also compliant with relevant data protection

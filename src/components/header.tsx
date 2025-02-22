@@ -13,13 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   ClipboardList,
-  Calendar,
-  Package,
-  CreditCard,
-  BarChart2,
-  Smartphone,
-  CheckCircle,
-  Menu,
 } from "lucide-react";
 export default function Header() {
   const { user } = useContext(UserContext);

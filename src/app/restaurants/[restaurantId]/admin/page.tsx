@@ -1,26 +1,22 @@
 'use client'
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { LayoutDashboard, Menu, ShoppingBag, Truck, Star, Users, CreditCard } from "lucide-react"
+// import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-const SidebarButton = ({ icon, text, isExpanded }: { icon: React.ReactNode, text: string, isExpanded: boolean }) => (
-  <Button variant="ghost" className="w-full justify-start px-2">
-    <span className={cn("transition-all duration-300", 
-      isExpanded ? "mr-2" : "mr-0")}>
-      {icon}
-    </span>
-    <span className={cn("transition-all duration-300", 
-      isExpanded ? "opacity-100 w-auto" : "opacity-0 w-0")}>
-      {text}
-    </span>
-  </Button>
-)
+// const SidebarButton = ({ icon, text, isExpanded }: { icon: React.ReactNode, text: string, isExpanded: boolean }) => (
+//   <Button variant="ghost" className="w-full justify-start px-2">
+//     <span className={cn("transition-all duration-300", 
+//       isExpanded ? "mr-2" : "mr-0")}>
+//       {icon}
+//     </span>
+//     <span className={cn("transition-all duration-300", 
+//       isExpanded ? "opacity-100 w-auto" : "opacity-0 w-0")}>
+//       {text}
+//     </span>
+//   </Button>
+// )
 
 export default function Page() {
-  const [isExpanded, setIsExpanded] = useState(false)
-
   return (
     <div className="relative h-screen overflow-hidden">
       <main className={cn(
@@ -54,10 +50,3 @@ export default function Page() {
     </div>
   )
 }
-//signup/signin
-//Landing Page
-//Blogs 
-//Home page - Dashboard showing all the restaurants data,
-//Restaurants - page listing the restaurants with a link to admin panel
-//Settings
-//Subscriptions

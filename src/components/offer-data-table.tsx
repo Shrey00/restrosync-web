@@ -1,11 +1,7 @@
 "use client";
-import { columns } from "@/components/offer-columns";
-import { UserContext } from "@/context/context";
-
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -21,7 +17,7 @@ import {
   getExpandedRowModel,
 } from "@tanstack/react-table";
 
-import { useState, useContext } from "react";
+import { useState } from "react";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -36,7 +32,6 @@ const OffersDataTable = <TData, TValue>({
   });
   //define the expanded state
   const [expanded, setExpanded] = useState<ExpandedState>({});
-  const { user } = useContext(UserContext);
   const table = useReactTable({
     data,
     columns,

@@ -77,7 +77,7 @@ export function DataTable<TData, TValue>({
       if (responseData.data) {
         let addOnsLength = 0;
         let variantsLength = 0;
-        responseData.data.forEach((item: MenuItem, index: number) => {
+        responseData.data.forEach((item: MenuItem) => {
           if (item.variant === "child") ++variantsLength;
           if (item.variant === "add-ons") ++addOnsLength;
         });
@@ -126,11 +126,11 @@ export function DataTable<TData, TValue>({
       // setSubRowDataLoading({ ...subRowDataLoading, [key]: false });
     }
     Object.entries(expanded).map((entry) => {
-      let key = entry[0];
-      let value = entry[1];
+      const key = entry[0];
+      const value = entry[1];
       if (value) {
         let subRowLoaded = false;
-        Object.keys(subRowData).forEach((item, index) => {
+        Object.keys(subRowData).forEach((item) => {
           if (item === key) {
             subRowLoaded = true;
           }

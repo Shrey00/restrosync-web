@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import {
@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import {UserContext} from "@/context/context";
 import { useParams } from "next/navigation";
 const SidebarButton = ({
   href,
@@ -54,14 +53,13 @@ const SidebarButton = ({
   );
 };
 
-export default function adminPanelRootLayout({
+export default function AdminPanelRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const [isExpanded, setIsExpanded] = useState(false);
   const params = useParams();
-  const { user } = useContext(UserContext);
   return (
     <div className="relative h-[90.9vh] overflow-hidden">
       <aside

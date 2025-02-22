@@ -1,11 +1,9 @@
 "use client";
 import { useState, useEffect, useContext, useRef } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PlusIcon, User } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { PlusIcon } from "lucide-react";
 import OrderCard from "@/components/OrderCard";
 import { OrderProps } from "@/types";
 import { UserContext } from "@/context/context";
@@ -20,7 +18,7 @@ import {
   SelectGroup,
   SelectContent,
 } from "@/components/ui/select";
-const orders = () => {
+const Orders = () => {
   const { user } = useContext(UserContext);
   const params = useParams();
   const searchRef = useRef(null);
@@ -163,8 +161,8 @@ const orders = () => {
         </div>
       ) : (
         <div>
-          {orders?.map((item: any, index: number) => (
-            <OrderCard orderInfo={item} />
+          {orders?.map((item: any, index) => (
+            <OrderCard key={index} orderInfo={item} />
           ))}
         </div>
       )}
@@ -173,4 +171,4 @@ const orders = () => {
     </div>
   );
 };
-export default orders;
+export default Orders;

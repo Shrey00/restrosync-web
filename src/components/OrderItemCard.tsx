@@ -24,7 +24,7 @@ const OrderItemCard = ({ orderItem }: { orderItem: any }) => {
   useEffect(() => {
     (async () => {
       if (orderItemStatus) {
-        const response = await fetch(
+        await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/orders/order-item/set-status`,
           {
             method: "PATCH",
@@ -91,7 +91,7 @@ const OrderItemCard = ({ orderItem }: { orderItem: any }) => {
           <p className="font-semibold text-md">Add-ons</p>
           <div>
             {orderItem?.addOns.map((item: any, index: number) => (
-              <ul className="list-none">
+              <ul className="list-none" key={index}>
                 <li className="flex gap-4">
                   <div className="font-medium">{item.name}</div>
                   <div>₹{item.sellingPrice}</div>

@@ -4,7 +4,6 @@ import { Badge } from "./ui/badge";
 import { OrderProps } from "@/types";
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "@/context/context";
-import OrderItemCard from "@/components/OrderItemCard";
 import {
   Select,
   SelectItem,
@@ -13,20 +12,6 @@ import {
   SelectGroup,
   SelectContent,
 } from "@/components/ui/select";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-} from "./ui/carousel";
-import { MoreVertical } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -37,7 +22,6 @@ import OrderItems from "@/components/OrderItems";
 import { Separator } from "./ui/separator";
 const OrderCard = ({ orderInfo }: { orderInfo: OrderProps }) => {
   const [orderStatus, setOrderStatus] = useState("");
-  const [loading, setLoading] = useState(true);
   const { user } = useContext(UserContext);
   useEffect(() => {
     (async () => {

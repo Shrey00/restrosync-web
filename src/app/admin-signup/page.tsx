@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-import PhoneVerification from '@/components/otpCard';
 export default function SignUpForm() {
   const [step, setStep] = useState(1)
 
@@ -23,15 +22,12 @@ export default function SignUpForm() {
     "emoji": "\ud83c\uddee\ud83c\uddf3",
     "image": "https:\/\/cdn.jsdelivr.net\/npm\/country-flag-emoji-json@2.0.0\/dist\/images\/IN.svg"
   };
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [formWarning, setFormWarning] = useState('');
   const [showVerifyBtn, setShowVerifyBtn] = useState(true);
   const [otp, setOtp] = useState(['', '', '', '']);
   const otpRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)]
   const emailRef = useRef<HTMLInputElement>(null)
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhoneNumber(e.target.value)
-  }
+
 
   const handleOtpChange = (index: number, value: string) => {
     const newOtp = [...otp]
