@@ -5,12 +5,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary-foreground: 355.7 100% 97.3%;
 }
 
 
   :root .dark {
       --background: #0a0a0a;
       --foreground: #ededed;
+      --primary-foreground: 355.7 100% 97.3%;
     }
     
 
@@ -46,7 +48,9 @@ body {
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
+    --border: 240 5.9% 85%;
+    --scroller: 240 5.9% 80%;
+    --scroller-hover: 240 5.9% 85%;
     --input: 240 80% 90%;
     --ring: 346.8 77.2% 49.8%;
     --radius: 0.5rem;
@@ -75,6 +79,8 @@ body {
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
     --border: 240 3.7% 15.9%;
+    --scroller: 240 3.7% 18%;
+    --scroller-hover: 240 3.7% 24%;
     --input: 240 3.7% 25%;
     --ring: 346.8 77.2% 49.8%;
     --chart-1: 220 70% 50%;
@@ -82,6 +88,23 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background:hsl(var(--scroller));
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background:  hsl(var(--scroller-hover));
   }
 }
 
@@ -94,3 +117,4 @@ body {
     @apply bg-background text-foreground;
   }
 }
+

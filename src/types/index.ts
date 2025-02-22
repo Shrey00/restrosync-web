@@ -1,20 +1,3 @@
-export interface MenuItem {
-    id: string,
-    name: string,
-    restaurantId: string,
-    primaryCategory: string,
-    secondaryCategory: string,
-    cuisineType: string,
-    orders: number,
-    available: boolean,
-    description: string,
-    rating: number,
-    reviewSummary: string,
-    markedPrice: number,
-    sellingPrice: number,
-    discount: number,
-    calories: number,
-    healthScore: number,
-    showHealthScore: boolean,
-    images: Array<string>
-}
+export * from "./users";
+export * from "./orders";
+export * from "./menu";
