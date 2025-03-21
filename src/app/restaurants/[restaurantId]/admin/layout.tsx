@@ -7,10 +7,10 @@ import {
   LayoutDashboard,
   Menu,
   ShoppingBag,
-  Truck,
-  Star,
-  Users,
-  CreditCard,
+  // Truck,
+  // Star,
+  // Users,
+  // CreditCard,
   PartyPopper
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -96,30 +96,30 @@ export default function AdminPanelRootLayout({
             text="Offers"
             isExpanded={isExpanded}
           />
-          <SidebarButton
+          {/* <SidebarButton
             href="#"
             icon={<Truck className="h-5 w-5" />}
             text="Deliveries"
             isExpanded={isExpanded}
-          />
-          <SidebarButton
+          /> */}
+          {/* <SidebarButton
             href="#"
             icon={<Star className="h-5 w-5" />}
             text="Reviews"
             isExpanded={isExpanded}
-          />
-          <SidebarButton
+          /> */}
+          {/* <SidebarButton
             href="#"
             icon={<Users className="h-5 w-5" />}
             text="Customers"
             isExpanded={isExpanded}
-          />
-          <SidebarButton
+          /> */}
+          {/* <SidebarButton
             href="#"
             icon={<CreditCard className="h-5 w-5" />}
             text="Billing"
             isExpanded={isExpanded}
-          />
+          /> */}
         </nav>
       </aside>
       <main

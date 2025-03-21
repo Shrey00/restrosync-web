@@ -3,6 +3,7 @@ import { useState, useRef, useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -13,6 +14,7 @@ import {
 import { EyeOpenIcon, EyeClosedIcon } from "@radix-ui/react-icons";
 import { UserContext } from "@/context/context";
 export default function SignIpForm() {
+  const router = useRouter();
   const [step] = useState(1);
   const [passwordShow, setPasswordShow] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,7 +31,7 @@ export default function SignIpForm() {
   // };
   const [formWarning, setFormWarning] = useState("");
   const emailRef = useRef<HTMLInputElement>(null);
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setFormData({ ...formData, [e.target.name]: inputValue });
@@ -56,17 +58,20 @@ export default function SignIpForm() {
       emailRef.current?.checkValidity()
     ) {
       setFormWarning("");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/signin`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams(formData).toString(),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/signin`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams(formData).toString(),
+        }
+      );
       const parsedResponse = await response.json();
       const token = parsedResponse.data[0].token;
-      localStorage.setItem('token', token);
+      localStorage.setItem("token", token);
       setUser({
         firstName: parsedResponse.data[0].firstName,
         lastName: parsedResponse.data[0].lastName,
@@ -77,6 +82,10 @@ export default function SignIpForm() {
       });
     }
   };
+
+  if (user) {
+    router.push("/restaurants");
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">

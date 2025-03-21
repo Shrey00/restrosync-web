@@ -60,19 +60,21 @@ export function DataTable<TData, TValue>({
 
   useEffect(() => {
     async function fetchSubRowData(key: string) {
-      console.log(subRowData[key]);
       const rowData: MenuItem = table.getRowModel().rowsById[key]
         .original as MenuItem;
       setSubRowDataLoading({ ...subRowDataLoading, [key]: true });
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/item/variants`, {
-        credentials: "include",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user?.token}`,
-        },
-        body: JSON.stringify({ menuItemId: rowData.id }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/menu/item/variants`,
+        {
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: JSON.stringify({ menuItemId: rowData.id }),
+        }
+      );
       const responseData = await response.json();
       if (responseData.data) {
         let addOnsLength = 0;
@@ -138,7 +140,7 @@ export function DataTable<TData, TValue>({
         if (!subRowLoaded) fetchSubRowData(key);
       }
     });
-  }, [expanded]);
+  }, [expanded,subRowData]);
 
   function returnRowData(key: string) {
     const rowData = table.getRowModel().rowsById[key].original;
@@ -171,13 +173,13 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row, rowIndex) => (
               <>
                 <TableRow
-                  key={row.id}
+                  key={rowIndex}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => {
+                  {row.getVisibleCells().map((cell, index) => {
                     return (
                       <TableCell
-                        key={cell.id}
+                        key={index}
                         className={`${
                           cell.id === rowIndex + "_images"
                             ? "min-w-32 pl-6 pr-8"

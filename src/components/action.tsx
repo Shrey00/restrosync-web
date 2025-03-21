@@ -50,7 +50,7 @@ const Action = ({ row }: { row: any }) => {
   };
   return (
     <div className="flex items-center">
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
             <MoreVertical className="h-4 w-4" />
@@ -74,7 +74,7 @@ const Action = ({ row }: { row: any }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Dialog open={openEditModal}>
+      <Dialog open={openEditModal} onOpenChange={setOpenEditModal}>
         <AddMenuItemModal selectedElt={formData} />
       </Dialog>
       <AlertDialog open={openWarningModal}>

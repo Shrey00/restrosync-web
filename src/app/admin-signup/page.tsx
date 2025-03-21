@@ -56,7 +56,7 @@ export default function SignUpForm() {
     let inputValue = e.target.value;
 
     if(e.target.id === "phone"){
-      inputValue = inputValue.replaceAll(/\D/g, "");      
+      inputValue = inputValue.replaceAll(/\D/g, "");
       if(inputValue.length>10){
         setShowVerifyBtn(false);
         setFormWarning("Digits should not be more than 10")
@@ -70,7 +70,7 @@ export default function SignUpForm() {
   }
   console.log(formData)
 
-  const handleNext = () => {    
+  const handleNext = () => {
     console.log(step, formData.firstName.length, formData.lastName.length)
     if(step === 1 && (formData.firstName.length===0 || formData.lastName.length === 0)) {
       setFormWarning("Please enter your first name and last name!");
@@ -79,7 +79,6 @@ export default function SignUpForm() {
       setStep((step + 1))
     }else if(step === 2 && (formData.email.length===0 || formData.password.length === 0)) {
       setFormWarning("Please enter your email and password!");
-      
     }else if(step === 2 && (formData.email.length>0 && formData.password.length > 0 && !emailRef.current?.checkValidity())) {
       emailRef.current?.reportValidity();
       if(formData.password.length<8) {
@@ -90,7 +89,7 @@ export default function SignUpForm() {
     }else if(step === 2 && (formData.email.length>0 && formData.password.length >= 8 && emailRef.current?.checkValidity())) {
       setStep(step+1);
       setFormWarning("");
-    } 
+    }
   }
 
   const handlePrevious = () => {

@@ -1,10 +1,5 @@
 "use client";
-import {
-  useState,
-  useCallback,
-  useEffect,
-  useContext,
-} from "react";
+import { useState, useCallback, useEffect, useContext } from "react";
 import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
@@ -51,24 +46,53 @@ import { MenuItem } from "@/types";
 import SearchSelect from "./menu-type-search-select";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { MenuItemFormData } from "@/types/index";
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_IMAGES = 4;
-
+enum MenuCategory {
+  "Appetizers" = "1",
+  "Main Course" = "2",
+  "Sides" = "3",
+  "Desserts" = "4",
+  "Beverages" = "5",
+  "Salads" = "6",
+  "Soups" = "7",
+  "Breakfast" = "8",
+  "Brunch" = "9",
+  "Snacks" = "10",
+  "Specials" = "11",
+}
+type MenuCategoryType =
+  | "Appetizers"
+  | "Main Course"
+  | "Sides"
+  | "Desserts"
+  | "Beverages"
+  | "Salads"
+  | "Soups"
+  | "Breakfast"
+  | "Brunch"
+  | "Snacks"
+  | "Specials";
 function MenuItemForm({
   menuItems,
   setMenuItems,
+  selectedElt,
 }: {
   menuItems?: MenuItem[];
   setMenuItems: any;
+  selectedElt: any;
 }) {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const { user } = useContext(UserContext);
   const params = useParams();
   const [variantFormState, setVariantFormState] = useState<any>({});
   const menuItemFormSchema = z.object({
+    id: z.string().nullable(),
     name: z.string(),
-    category: z.coerce.number(),
+    category: z.string(),
+    categoryId: z.coerce.number(),
     type: z.string(),
     cuisineType: z.string(),
     images: z.array(z.instanceof(File)),
@@ -84,33 +108,49 @@ function MenuItemForm({
     variant: z.string(),
     addons: z.string(),
   });
-
-  // - ITEM 1 - MAIN
-  // CHILD ITEMS - also menuItems
-  // ITEM MASTER ITEM - in the back keep the copy
-  // In the front of it
-  // 1. Define your form.
   const menuItemForm = useForm<z.infer<typeof menuItemFormSchema>>({
     resolver: zodResolver(menuItemFormSchema),
-    defaultValues: {
-      name: "",
-      category: 0,
-      type: "0",
-      cuisineType: "",
-      images: [],
-      available: true,
-      description: "",
-      markedPrice: 0,
-      sellingPrice: 0,
-      discount: 0,
-      calories: 0,
-      healthScore: 0,
-      showHealthInfo: "false",
-      variant: "none",
-      addons: "none",
-    },
+    mode: "onChange",
+    defaultValues: selectedElt
+      ? {
+          id: selectedElt.id,
+          name: selectedElt.name,
+          category: selectedElt.category,
+          categoryId: selectedElt.categoryId,
+          type: MenuCategory[selectedElt.type as MenuCategoryType],
+          cuisineType: selectedElt.cuisineType,
+          images: selectedElt.images,
+          available: selectedElt.available,
+          description: selectedElt.description,
+          markedPrice: selectedElt.markedPrice,
+          sellingPrice: selectedElt.sellingPrice,
+          discount: selectedElt.discount,
+          calories: selectedElt.calories,
+          healthScore: selectedElt.healthScore,
+          showHealthInfo: selectedElt.showHealthInfo,
+          variant: selectedElt.variant,
+          addons: "none",
+        }
+      : {
+          name: "",
+          category: "",
+          categoryId: 0,
+          type: "0",
+          cuisineType: "",
+          images: [],
+          available: true,
+          description: "",
+          markedPrice: 0,
+          sellingPrice: 0,
+          discount: 0,
+          calories: 0,
+          healthScore: 0,
+          showHealthInfo: "false",
+          variant: "none",
+          addons: "none",
+        },
   });
-
+  console.log(menuItemForm.formState);
   const watchTypeSelection = menuItemForm.watch("type");
   const watchShowHealthInfo = menuItemForm.watch("showHealthInfo");
   const watchVariants = menuItemForm.watch("variant");
@@ -132,9 +172,8 @@ function MenuItemForm({
       );
       const menuItemsTypeData = await fetchTypesAndCategories.json();
       const selectedCategories = menuItemsTypeData.data?.filter(
-        (
-          item: { id: any; type: string; categories: string[] },
-        ) => item.id == menuItemForm.getValues("type")
+        (item: { id: any; type: string; categories: string[] }) =>
+          item.id == menuItemForm.getValues("type")
       );
       setCategoriesUnderSelectedType(selectedCategories);
     })();
@@ -178,63 +217,17 @@ function MenuItemForm({
         variantFormData.push(createVariantFormData);
       }
 
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/menu/item/add-variants`,
-        {
-          credentials: "include",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.token}`,
-          },
-          body: JSON.stringify(variantFormData),
-        }
-      );
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/item/add-variants`, {
+        credentials: "include",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+        body: JSON.stringify(variantFormData),
+      });
     }
   }
-  // async function handleAddonsFormSubmission(
-  //   formData: any,
-  //   responseMenuData: any
-  // ) {
-  //   if (watchAddons === "addons") {
-  //     const addonsFormData: any = [];
-  //     for (const addonKey in addonsFormState) {
-  //       let createAddonsFormData: any = {};
-  //       formData.forEach((value: any, variantFormDataKey: any) => {
-  //         if (variantFormDataKey === "name") {
-  //           createAddonsFormData["name"] = addonsFormState[addonKey].addonName;
-  //         } else if (variantFormDataKey === "variant")
-  //           createAddonsFormData["variant"] = "child";
-  //         else if (variantFormDataKey === "markedPrice")
-  //           createAddonsFormData["markedPrice"] =
-  //             variantFormState[addonKey].addonPrice;
-  //         else if (variantFormDataKey === "sellingPrice") {
-  //           createAddonsFormData["sellingPrice"] =
-  //             variantFormState[addonKey].addonPrice;
-  //         } else if (variantFormDataKey === "sellingPrice") {
-  //           createAddonsFormData["description"] =
-  //             variantFormState[addonKey].addonDescription;
-  //         } else createAddonsFormData[variantFormDataKey] = value;
-
-  //         createAddonsFormData["mainItemId"] = responseMenuData.data[0].id;
-  //       });
-  //       addonsFormData.push(createAddonsFormData);
-  //     }
-
-  //     const variantResponse = await fetch(
-  //       `${process.env.NEXT_PUBLIC_API_URL}/menu/item/add-addons`, //todo - make server side too
-  //       {
-  //         credentials: "include",
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${user?.token}`,
-  //         },
-  //         body: JSON.stringify(addonsFormData),
-  //       }
-  //     );
-  //   }
-  // }
   async function onSubmit(values: { [key: string]: any }) {
     try {
       const formData = new FormData();
@@ -242,28 +235,73 @@ function MenuItemForm({
         if (key !== "images") {
           formData.append(key, values[key]);
         }
+        console.log(key, values[key]);
       });
       values.images.forEach((image: File) => {
         formData.append("images", image);
       });
       formData.append("restaurantId", params.restaurantId as string);
       // formData.append("variant", watchVariants);
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/menu/add-item`,
-        {
-          credentials: "include",
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-          body: formData,
-        }
-      );
-      const responseMenuData = await response.json();
-      handleVariantsFormSubmission(formData, responseMenuData);
-      // handleAddonsFormSubmission(formData, responseMenuData);
-      if (menuItems) setMenuItems([...menuItems, responseMenuData.data[0]]);
+      //update existing menu item
+      if (selectedElt?.name.length) {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/menu/update-item`,
+          {
+            credentials: "include",
+            method: "PATCH",
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
+            body: formData,
+          }
+        );
+        const responseMenuData = await response.json();
+        handleVariantsFormSubmission(formData, responseMenuData);
+        // handleAddonsFormSubmission(formData, responseMenuData);
+        const updatedMenuItems = [...menuItems!];
+        updatedMenuItems.forEach((item, index) => {
+          if (item.id === selectedElt.id) {
+            updatedMenuItems[index] = {
+              ...updatedMenuItems[index],
+              id: responseMenuData.id,
+              name: responseMenuData.name,
+              restaurantId: responseMenuData.restaurantId,
+              category: responseMenuData.category,
+              type: responseMenuData.type,
+              cuisineType: responseMenuData.cuisineType,
+              images: responseMenuData.images,
+              available: responseMenuData.available,
+              description: responseMenuData.description,
+              rating: responseMenuData.rating,
+              reviewSummary: responseMenuData.ratingSummary,
+              markedPrice: responseMenuData.markedPrice,
+              sellingPrice: responseMenuData.sellingPrice,
+              discount: responseMenuData.discount,
+              calories: responseMenuData.calories,
+              healthScore: responseMenuData.healthScore,
+              showHealthScore: responseMenuData.showHealthScore,
+              variant: responseMenuData.variant,
+            };
+          }
+        });
+        setMenuItems(updatedMenuItems);
+      } else {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/menu/add-item`,
+          {
+            credentials: "include",
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
+            body: formData,
+          }
+        );
+        const responseMenuData = await response.json();
+        handleVariantsFormSubmission(formData, responseMenuData);
+        // handleAddonsFormSubmission(formData, responseMenuData);
+        setMenuItems([...menuItems!, responseMenuData.data[0]]);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -365,8 +403,8 @@ function MenuItemForm({
                         <p>Drop the files here ...</p>
                       ) : (
                         <p>
-                          Drag &apos;n&apos; drop some files here, or click to select
-                          files
+                          Drag &apos;n&apos; drop some files here, or click to
+                          select files
                         </p>
                       )}
                       <p className="text-sm text-gray-500 mt-2">
@@ -485,7 +523,7 @@ function MenuItemForm({
           />
           <FormField
             control={menuItemForm.control}
-            name="category"
+            name="categoryId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
@@ -724,166 +762,6 @@ function MenuItemForm({
               })}
           </div>
         </div>
-        {/* <p className="font-bold p-1 text-sm border-b-[1px] border-border">
-          Variants
-        </p>
-        <div className="flex flex-col gap-4">
-          <div className="flex justify-between items-end">
-            <FormField
-              control={menuItemForm.control}
-              name="addons"
-              render={({ field }) => (
-                <FormItem className="col-start-1 col-end-3">
-                  <FormLabel>Insert Add-ons to this menu item? </FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex gap-4"
-                    >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value={"addons"} />
-                        </FormControl>
-                        <FormLabel className="font-normal cursor-pointer">
-                          Yes
-                        </FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value={"none"} />
-                        </FormControl>
-                        <FormLabel className="font-normal cursor-pointer">
-                          No
-                        </FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {watchAddons === "addons" && (
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  setVariantFormState({
-                    ...variantFormState,
-                    [`variant-${Object.keys(variantFormState).length}`]: {
-                      variantName: "",
-                      variantPrice: 0,
-                    },
-                  });
-                }}
-                className="pt-[4px] pb-[4px] pl-[6px] pr-[6px] text-xs"
-              >
-                <PlusIcon size={16} />
-                Add Add-ons
-              </Button>
-            )}
-          </div>
-          <div>
-            {watchVariants === "parent" &&
-              Object.keys(variantFormState).map((item, index) => {
-                return (
-                  <div className="flex gap-4 items-start">
-                    <Accordion
-                      key={index}
-                      type="single"
-                      collapsible
-                      className="w-full"
-                    >
-                      <AccordionItem value="item-1">
-                        <AccordionTrigger>
-                          Add-on - {index + 1}
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                              <Input
-                                className="w-[60%]"
-                                type="text"
-                                name={`addonName`}
-                                value={
-                                  addonsFormState[`addons-${index}`][
-                                    "addonName"
-                                  ]
-                                }
-                                onChange={(e) =>
-                                  handleAddonsForm(e, `addons-${index}`)
-                                }
-                              />
-                            </FormControl>
-                            <FormDescription>
-                              Please add full name of the variant{" "}
-                              <i>(e.g Veg Pizza(large))</i>
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                          <FormItem>
-                            <FormLabel>Price</FormLabel>
-                            <FormControl>
-                              <Input
-                                className="w-[60%]"
-                                type="number"
-                                name={`addonPrice`}
-                                value={
-                                  addonsFormState[`addons-${index}`][
-                                    "addonPrice"
-                                  ]
-                                }
-                                onChange={(e) =>
-                                  handleAddonsForm(e, `addons-${index}`)
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                          <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl>
-                              <Input
-                                className="w-[60%]"
-                                type="text"
-                                name={`addonDescription`}
-                                value={
-                                  addonsFormState[`addons-${index}`][
-                                    "addonDescription"
-                                  ]
-                                }
-                                onChange={(e) =>
-                                  handleAddonsForm(e, `addons-${index}`)
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                    <Link
-                      href="#"
-                      className="text-red-600 font-semibold"
-                      onClick={(e) => handleVariantDelete(e, item)}
-                    >
-                      Delete
-                    </Link>
-                  </div>
-                );
-              })}
-          </div>
-          <div>
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="Select from Existing Add-ons">
-                <AccordionTrigger>
-                  Select from Existing Add-ons
-                </AccordionTrigger>
-                <AccordionContent></AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-        </div> */}
         <p className="font-bold p-1 text-sm border-b-[1px] border-border">
           Pricing Details
         </p>
@@ -988,32 +866,29 @@ const AddMenuItemModal = ({
   menuItems?: MenuItem[];
   setMenuItems?: any;
 }) => {
-  // const [formData, setFormData] = useState<Partial<MenuItemFormData>>({
-  //   id: "",
-  //   images: [],
-  //   name: "",
-  //   category: "",
-  //   type: "",
-  //   cuisineType: "",
-  //   orders: 0,
-  //   available: false,
-  //   description: "",
-  //   markedPrice: 0,
-  //   sellingPrice: 0,
-  //   discount: 0,
-  //   calories: 0,
-  //   healthScore: 0,
-  //   showHealthScore: false,
-  //   variant: "none",
-  // });
-  // useEffect(() => {
-  //   if (selectedElt) {
-  //     setFormData(selectedElt);
-  //   }
-  // }, [selectedElt]);
-  if(selectedElt) {
-    console.log('selected')
-  }
+  const [formData, setFormData] = useState<Partial<MenuItemFormData>>({
+    id: "",
+    images: [],
+    name: "",
+    category: "",
+    type: "",
+    cuisineType: "",
+    orders: 0,
+    available: false,
+    description: "",
+    markedPrice: 0,
+    sellingPrice: 0,
+    discount: 0,
+    calories: 0,
+    healthScore: 0,
+    showHealthScore: false,
+    variant: "none",
+  });
+  useEffect(() => {
+    if (selectedElt) {
+      setFormData(selectedElt);
+    }
+  }, [selectedElt]);
 
   return (
     <DialogContent className="h-[80vh] max-w-3xl overflow-auto">
@@ -1028,6 +903,7 @@ const AddMenuItemModal = ({
       <MenuItemForm
         menuItems={menuItems}
         setMenuItems={setMenuItems ? setMenuItems : null}
+        selectedElt={formData}
       />
     </DialogContent>
   );

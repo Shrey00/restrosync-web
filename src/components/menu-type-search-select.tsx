@@ -52,7 +52,7 @@ export default function SearchSelect({
   //     console.log(e);
   //   }
   // }
-
+  console.log(options)
   return (
     <div>
       <Popover open={open} onOpenChange={setOpen}>
@@ -86,19 +86,20 @@ export default function SearchSelect({
                   <CommandItem
                     className="data-[disabled]:pointer-events-auto"
                     key={index}
-                    value={option.name}
+                    value={option.id}
                     onSelect={() => {
                       // setValue(currentValue === value ? "" : currentValue);
-                      menuItemForm.setValue("category", option.id);
+                      menuItemForm.setValue("category", option.name);
+                      menuItemForm.setValue("categoryId", option.id);
+                      console.log("CATEGORY BOI", option.id)
+                      console.log("CATEGORY is it ", menuItemForm.getValues())
                       setOpen(false);
                     }}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        field.value === option.name
-                          ? "opacity-100"
-                          : "opacity-0"
+                        field.value === option.id ? "opacity-100" : "opacity-0"
                       )}
                     />
                     {option.name}

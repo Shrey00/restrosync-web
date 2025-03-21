@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect, useContext, useRef } from "react";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+// import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PlusIcon } from "lucide-react";
+// import { PlusIcon } from "lucide-react";
 import OrderCard from "@/components/OrderCard";
 import { OrderProps } from "@/types";
 import { UserContext } from "@/context/context";
@@ -72,15 +72,14 @@ const Orders = () => {
         <CardContent className="overflow-x-auto"> */}
       <div className="py-6 flex items-center justify-between">
         <h2 className="text-foreground font-bold text-2xl">Orders</h2>
-        <Dialog>
+        {/* <Dialog>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-1">
               <PlusIcon size={18} />
               Create Order
             </Button>
           </DialogTrigger>
-          {/* // <AddMenuItemModal selectedElt={null} /> */}
-        </Dialog>
+        </Dialog> */}
       </div>
       <div className="flex gap-4 mb-6">
         <Input

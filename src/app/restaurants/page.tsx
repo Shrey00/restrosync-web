@@ -5,18 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { UserContext } from "@/context/context";
-import {
-  Clock,
-  Star,
-  MoreVerticalIcon,
-} from "lucide-react";
+import { Clock, Star, MoreVerticalIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-
+import { useRouter } from "next/navigation";
 const Page = () => {
   type RestaurantListItem = {
     id: string;
@@ -31,6 +27,7 @@ const Page = () => {
   type Restaurantlist = RestaurantListItem[];
   const [restaurants, setRestaurants] = useState<Restaurantlist>([]);
   const { user } = useContext(UserContext);
+  const router = useRouter();
   useEffect(() => {
     (async () => {
       // setLoading(true);
@@ -53,6 +50,9 @@ const Page = () => {
       }
     })();
   }, []);
+  if (!user) {
+    router.push("/admin-signin");
+  }
   return (
     <div className="container mx-auto py-8 px-[24px]">
       <div className="flex justify-between">

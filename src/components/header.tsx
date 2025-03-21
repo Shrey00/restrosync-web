@@ -11,11 +11,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ClipboardList,
-} from "lucide-react";
+import { ClipboardList } from "lucide-react";
 export default function Header() {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   return (
     <header className="flex h-16 items-center justify-between border-b px-4 md:px-6">
       <div className="flex items-center">
@@ -58,20 +56,28 @@ export default function Header() {
           >
             FAQ
           </Link>
+          <Link
+            className="text-sm font-medium hover:text-primary transition-colors"
+            href="/admin-signin"
+          >
+            Admin Signin
+          </Link>
         </nav>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/placeholder-avatar.jpg" alt="User avatar" />
-                <AvatarFallback>U</AvatarFallback>
+                <AvatarFallback>{user?.firstName.slice(0,1)}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{user?.firstName} {user?.lastName}</p>
+                <p className="text-sm font-medium leading-none">
+                  {user?.firstName} {user?.lastName}
+                </p>
                 <p className="text-xs leading-none text-muted-foreground">
                   {user?.email}
                 </p>
@@ -80,7 +86,14 @@ export default function Header() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Log out</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setUser(null);
+                localStorage.removeItem("token");
+              }}
+            >
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
